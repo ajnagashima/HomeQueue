@@ -18,15 +18,13 @@ export default class LoginForm extends Component{
   }
 
   buttonPressed(){
-    //const {onPress} = this.props
-    console.log(this.state.password)
-    console.log("sssssssss")
-    //onPress(this.passwordInput)
+    const {onPress} = this.props
+    onPress(this.state.username, this.state.password)
   }
 
-  handleChange(event){
+  handleChange(id, text){
     tempState = this.state
-    tempState[event.target.id] = event.target.value
+    tempState[id] = text
     this.setState(tempState)
   }
 
@@ -38,12 +36,15 @@ export default class LoginForm extends Component{
           autoCapitalize="none"
           autoCorrect={false}
           returnKeyType="next"
+          onChangeText={(text) => this.handleChange("username",text)}
           placeholder='Spotify Username'
           placeholderTextColor='#a9a9a9'
         />
         <TextInput
           style={styles.input}
           returnKeyType="go"
+          ref="PasswordInput"
+          onChangeText={(text) => this.handleChange("password", text)}
           autoCapitalize="none"
           placeholder='Password'
           placeholderTextColor='#a9a9a9'

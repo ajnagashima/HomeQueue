@@ -14,11 +14,11 @@ export default class Login extends Component{
     super(props)
   }
 
-  loginPress(passwordInput){
-    console.log(passwordInput)
-    console.log(usernameInput)
-    console.log("PRESSSSSSS")
-    this.props.navigation.navigate('Main')
+  loginPress(username, password){
+    console.log(password)
+    console.log(username)
+    if(password !== '' && username !== '')
+      this.props.navigation.navigate('Main')
   }
 
   render(){
