@@ -33,14 +33,24 @@ export default class Login extends Component{
     url += '&client_id='+encodeURIComponent(client_id)
     url += '&scope='+encodeURIComponent(scopes)
     url += '&redirect_uri='+encodeURIComponent(redirectURI)
-    this.setState({
-        view: url,
-        show: true,
-    })
+    this.displayURL(url)
+  }
 
-      }
+  displayURL(url){
+    this.setState({
+        url: url,
+    })
+  }
+
+  checkForToken(webViewState){
+    if(webViewState.url.includes(redirectURI))
+        this.loggedin(webViewState.url)
+  }
 
   loggedin(url){
+    this.setState({
+        url:null,
+    })
     console.log(url)
     
     this.props.navigation.navigate('Main')
@@ -50,15 +60,20 @@ export default class Login extends Component{
     return(
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 {
-                    this.state.show && 
+                    this.state.url != null && 
                     <Modal
-                    visible ={this.state.show}
+                    visible ={this.state.url != null}
                     animationtype = "slide"
                     transparent ={false}
-                    onRequestClose={() => {this.setState({view: null,show:false,})}}
+                    onRequestClose={() => 
+                        {
+                            this.setState({url:null})
+                        }
+                    }
                     >
                         <WebView
-                            source={{uri:this.state.view}}
+                            onNavigationStateChange={this.checkForToken.bind(this)}
+                            source={{uri:this.state.url}}
                         />
                     </Modal>
                 }
