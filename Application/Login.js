@@ -11,28 +11,28 @@ import {View,
   Alert
 } from 'react-native'
 import LoginForm from './LoginForm'
+import {getConfig} from '../globals'
 
+//const redirectURI = 'https://localhost:8888'
+//scope = 'user-read-email'
+//client_id = 'b610b0bf7b7644fab5905b20ad6f03e1'
 
-const redirectURI = 'https://localhost:8888'
-scope = 'user-read-email'
-client_id = 'b610b0bf7b7644fab5905b20ad6f03e1'
+const spotifyConfig = getConfig('Spotify')
 
 export default class Login extends Component{
   constructor(props){
     super(props)
     this.state = {
-        view: null,
-        show: false,
+        url: null,
     }
   }
 
   loginPress(username, password){
-    var scopes = 'user-read-email'
     var url = 'https://accounts.spotify.com/authorize'
     url += '?response_type=token'
-    url += '&client_id='+encodeURIComponent(client_id)
-    url += '&scope='+encodeURIComponent(scopes)
-    url += '&redirect_uri='+encodeURIComponent(redirectURI)
+    url += '&client_id='+encodeURIComponent(spotifyConfig.client_id)
+    url += '&scope='+encodeURIComponent(spotifyConfig.scope)
+    url += '&redirect_uri='+encodeURIComponent(spotifyConfig.redirectURI)
     this.displayURL(url)
   }
 
@@ -43,7 +43,7 @@ export default class Login extends Component{
   }
 
   checkForToken(webViewState){
-    if(webViewState.url.includes(redirectURI))
+    if(webViewState.url.includes(spotifyConfig.redirectURI))
         this.loggedin(webViewState.url)
   }
 
@@ -51,8 +51,6 @@ export default class Login extends Component{
     this.setState({
         url:null,
     })
-    console.log(url)
-    
     this.props.navigation.navigate('Main')
   }
 
