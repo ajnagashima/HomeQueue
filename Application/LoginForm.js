@@ -53,7 +53,7 @@ export default class LoginForm extends Component{
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={()=>this.buttonPressed()}>
-          <Text style={styles.buttonText}>LOGIN TO SPOTIFY</Text>
+          <Text style={styles.buttonText}>Login to Homequeue</Text>
         </TouchableOpacity>
       </View>
     )
