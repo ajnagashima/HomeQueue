@@ -20,7 +20,7 @@ export default class Login extends Component{
 
   loginPress(username,password){
     //dummy login until server is built
-    this.props.navigation.navigate('Main')
+    this.props.navigation.navigate("Main")
   }
 
   render(){
