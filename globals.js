@@ -1,6 +1,7 @@
 const configs = {
     Spotify:{
         redirectURI:'https://localhost:8888',
+        logoutRedirect:'https://www.spotify.com/us/',
         client_id: 'b610b0bf7b7644fab5905b20ad6f03e1',
         scope:'user-read-email',
     }

@@ -11,14 +11,16 @@ import {View,
   Alert
 } from 'react-native'
 import {getConfig} from '../../../globals'
+import SpotifyAuthButton from './SpotifyAuthButton'
 
 const spotifyConfig = getConfig('Spotify')
 
-export default class Login extends Component{
+export default class SpotifyAuth extends Component{
   constructor(props){
     super(props)
     this.state = {
         url: null,
+        loginStatus: false,
     }
   }
 
@@ -31,41 +33,61 @@ export default class Login extends Component{
     this.displayURL(url)
   }
 
-  displayURL(url){
-    this.setState({
-        url: url,
-    })
+  logout(){
+    var url = 'https://www.spotify.com/us/logout/'
+    this.displayURL(url)
   }
 
-  checkForToken(webViewState){
+  displayURL(url){
+    newState = this.state
+    newState.url = url
+    this.setState(newState)
+  }
+
+  checkForTarget(webViewState){
     if(webViewState.url.includes(spotifyConfig.redirectURI))
         this.loggedin(webViewState.url)
+    if(webViewState.url == spotifyConfig.logoutRedirect)
+        this.loggedOut()
   }
 
   loggedin(url){
-    const {callback} = this.props
+    //const {callback} = this.props
     this.setState({
         url:null,
+        loginStatus:true,
+    })
+  }
+
+  loggedOut(){
+    this.setState({
+        url:null,
+        loginStatus:false,
     })
   }
 
   render(){
     return(
-          <Modal
-          visible ={this.state.url != null}
-          animationtype = "slide"
-          transparent ={false}
-          onRequestClose={() => 
+          <View>
+            <SpotifyAuthButton
+            loginStatus={this.state.loginStatus}
+            onPress={this.state.loginStatus ? this.logout.bind(this):this.login.bind(this)}/>
+            <Modal
+            visible ={this.state.url != null}
+            animationtype = "slide"
+            transparent ={false}
+            onRequestClose={() => 
               {
                   this.setState({url:null})
               }
-          }
-          >
+            }
+            >
               <WebView
-                  onNavigationStateChange={this.checkForToken.bind(this)}
+                  onNavigationStateChange={this.checkForTarget.bind(this)}
                   source={{uri:this.state.url}}
                   />
-          </Modal>
+            </Modal>
+          </View>
     );
   }
 }

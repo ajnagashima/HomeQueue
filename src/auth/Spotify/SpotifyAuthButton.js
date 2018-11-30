@@ -3,6 +3,8 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Image,
+  Text,
 } from 'react-native'
 
 
@@ -17,12 +19,22 @@ export default class SpotifyAuthButton extends Component{
   }
 
   render(){
+    const {loginStatus} = this.props
     return(
       <View style={styles.container}>
         <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={()=>this.buttonPressed()}>
-          <Image source={require("../../../assets/Spotify/Spotify_Logo_RGB_Green.png")}/>
+          style={loginStatus ? styles.buttonLogout:styles.buttonLogin}
+          onPress={()=>this.buttonPressed()}
+          underlayColor='#fff'>
+          {(!loginStatus && 
+            <Image 
+                style={styles.buttonImage}
+                source={require("../../../assets/Spotify/Spotify_Logo_RGB_Black.png")}
+                resizeMode='contain'
+                resizeMethod='resize'
+                />) || 
+            (loginStatus &&
+                <Text style={styles.buttonText}>Logout</Text>)}
         </TouchableOpacity>
       </View>
     )
@@ -31,12 +43,35 @@ export default class SpotifyAuthButton extends Component{
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 15,
     borderRadius:5
   },
-  buttonContainer:{
-    backgroundColor: '#000000',
-    paddingVertical:15,
-    borderRadius:5,
+  buttonLogin:{
+    backgroundColor: '#1db954',
+    borderRadius:35,
+    height: 70,
+    padding:10,
+    borderColor:'#191414',
+    borderWidth: 2,
+  },
+  buttonLogout:{
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor: '#1db954',
+    borderRadius:35,
+    height: 70,
+    padding:10,
+    borderColor:'#191414',
+    borderWidth: 2,
+  },
+  buttonImage:{
+    flex:1,
+    height: undefined,
+    width:undefined,
+  },
+  buttonText: {
+    fontSize:35,
+    fontWeight: 'bold',
+    color: '#191414',
   },
 })
