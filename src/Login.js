@@ -18,9 +18,15 @@ export default class Login extends Component{
     super(props)
   }
 
+  static navigationOptions = ({navigation}) => {
+    return {
+        header: null,
+    }
+  }
+ 
   loginPress(username,password){
     //dummy login until server is built
-    this.props.navigation.navigate("Main")
+    this.props.navigation.navigate("Home")
   }
 
   render(){

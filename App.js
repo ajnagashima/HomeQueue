@@ -1,34 +1,37 @@
 import React from 'react'
 
-import {createDrawerNavigator, createSwitchNavigator} from 'react-navigation';
+import {createDrawerNavigator, createStackNavigator,} from 'react-navigation';
 import {Linking} from 'react-native'
 import {WebBrowser} from 'expo'
 
 import Login from './src/Login'
-import Main from './src/Main'
+import Home from './src/Home'
+import Players from './src/Players'
 import Sidebar from './src/Sidebar'
 
 const Drawer = createDrawerNavigator(
   {
-    Login: {screen: Login},
-    Main: {screen: Main},
+    Home: {screen: Home},
+    Login: {screen:Login},
+    Players: {screen: Players},
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: 'Login',
     contentOptions: {
       activeTintColor: "#1190cb"
     },
-    contentComponent: props => <Sidebar {...props} />
+    contentComponent: props => <Sidebar {...props} />,
   }
 )
 
-const App = createSwitchNavigator(
+const App = createStackNavigator(
   {
     Drawer: {screen: Drawer},
-    Main
+    Login: {screen: Login},
   },
   {
-    initialRouteName: 'Drawer'
+    initialRouteName: 'Login',
+    header:null,
   }
 )
 
