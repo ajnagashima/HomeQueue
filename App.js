@@ -1,4 +1,7 @@
 import React from 'react'
+import {render} from 'react-dom'
+import {Provider} from 'react-redux'
+import {createStore} from 'redux'
 
 import {createDrawerNavigator, createStackNavigator,} from 'react-navigation';
 import {Linking} from 'react-native'

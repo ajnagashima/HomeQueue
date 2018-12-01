@@ -20,7 +20,7 @@ export default class SpotifyAuth extends Component{
     super(props)
     this.state = {
         url: null,
-        loginStatus: false,
+        loginStatus: spotifyConfig.auth_token == null ? false : true,
     }
   }
 
@@ -52,14 +52,25 @@ export default class SpotifyAuth extends Component{
   }
 
   loggedin(url){
-    //const {callback} = this.props
+    const {callback} = this.props
+    vals = {}
+    queryString = url.split('#')[1]
+    arr = queryString.split('&')
+    for (i = 0; i < arr.length; i++){
+        a = arr[i].split('=')
+        vals[a[0]]=a[1]
+    }
+    spotifyConfig.auth_token = vals['access_token'] ? vals['access_token'] : null
+    spotifyConfig.token_type = vals['token_type'] ? vals['token_type'] : null
     this.setState({
         url:null,
-        loginStatus:true,
+        loginStatus:spotifyConfig.auth_token != null ? true : false,
     })
   }
 
   loggedOut(){
+    spotifyConfig.auth_token = null
+    spotifyConfig.token_type = null
     this.setState({
         url:null,
         loginStatus:false,

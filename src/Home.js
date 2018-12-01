@@ -1,6 +1,11 @@
 import React, {Component} from 'react'
 import {View, StyleSheet, Text, TouchableHighlight} from 'react-native'
 
+import {getConfig} from '../globals.js'
+
+const providers = ['Spotify']
+const configs = {}
+
 export default class Home extends Component{
   static navigationOptions = ({navigation}) => {
     return {
@@ -21,8 +26,15 @@ export default class Home extends Component{
   
   constructor(props){
     super(props)
+    
   }
   
+  componentDidMount(){
+    for (i = 0; i < providers.length; i++){
+        configs[providers[i]]=getConfig(providers[i])
+    }
+    console.log(configs)
+  }
 
   render(){
     return(
@@ -31,7 +43,7 @@ export default class Home extends Component{
         onPress={() => this.props.navigation.toggleDrawer()}>
             <Text>woop</Text>
         </TouchableHighlight>
-        <Text>You have entered Home</Text>
+        <Text>Welcome to home</Text>
       </View>
     )
   }
