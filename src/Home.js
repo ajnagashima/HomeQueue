@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import {View, StyleSheet, Text, TouchableHighlight} from 'react-native'
 
-import {getConfig} from '../globals.js'
+import {getConfig, getAuthToken} from '../globals.js'
+import Queue from './Queue'
 
-const providers = ['Spotify']
-const configs = {}
 
 export default class Home extends Component{
   static navigationOptions = ({navigation}) => {
@@ -26,24 +25,16 @@ export default class Home extends Component{
   
   constructor(props){
     super(props)
-    
   }
   
-  componentDidMount(){
-    for (i = 0; i < providers.length; i++){
-        configs[providers[i]]=getConfig(providers[i])
-    }
-    console.log(configs)
-  }
-
   render(){
     return(
       <View style={styles.container}>
-        <TouchableHighlight
+        <TouchableHighlight style = {styles.header}
         onPress={() => this.props.navigation.toggleDrawer()}>
             <Text>woop</Text>
         </TouchableHighlight>
-        <Text>Welcome to home</Text>
+        <Queue/>
       </View>
     )
   }
@@ -51,14 +42,15 @@ export default class Home extends Component{
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
+    flexDirection:'column',
     backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
   },
   header:{
-    flex: 1,
     justifyContent:'center',
     backgroundColor:'#84bd00',
-  }
+    padding: 10,
+    height:50,
+  },
 });
