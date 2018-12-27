@@ -3,7 +3,8 @@ import {
     View, 
     StyleSheet, 
     Text, 
-    TouchableHighlight
+    TouchableHighlight,
+    TextInput,
 } from 'react-native'
 
 var SpotifyWebApi = require('spotify-web-api-js')
@@ -12,12 +13,12 @@ import {getConfig, getAuthToken} from '../globals.js'
 
 const providers = ['Spotify']
 
-export default class Queue extends Component{
+export default class Search extends Component{
     constructor(props){
         super(props)
         this.state = {
             configs:{},
-
+            query:'',
         }
     }
 
@@ -38,10 +39,26 @@ export default class Queue extends Component{
         this.setupApi()
     }
 
+    handleChange(id, text){
+        tempState = this.state
+        tempState[id] = text
+        this.setState(tempState)
+    }
+
+    async submitQuery(){
+        if(this.state.query != '' && spotifyApi != null){
+            results = await spotifyApi.search(
+                this.state.query,
+                ['album','artist','track','playlist'])
+            console.log(results)
+        }
+    }
+
     setupApi(){
         if (this.state.configs.Spotify != undefined){
             spotifyApi = new SpotifyWebApi()
             spotifyApi.setAccessToken(this.state.configs.Spotify.auth_token)
+ 
         }else{
             spotifyApi = null
         }
@@ -52,8 +69,20 @@ export default class Queue extends Component{
             <View style={styles.container}>
             <TouchableHighlight style = {styles.header}
             onPress={() => this.props.navigation.toggleDrawer()}>
-                <Text>In Queue</Text>
+                <Text>In Search</Text>
             </TouchableHighlight>
+            <View style={styles.searchContainer}>
+            <TextInput
+                style={styles.input}
+                autoCapitalize="none"
+                autoCorrect={true}
+                returnKeyType="search"
+                onChangeText={(text)=> this.handleChange("query",text)}
+                onSubmitEditing={() => this.submitQuery()}
+                placeholder='Search'
+                placeholderTextColor='#a9a9a9'
+            />
+            </View>
             </View>
         )
     }
@@ -64,7 +93,11 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection:'column',
     backgroundColor: '#fff',
-    justifyContent: 'center',
+  },
+  searchContainer:{
+    flex:1,
+    flexDirection:'column',
+    backgroundColor: '#243c66',
   },
   header:{
     justifyContent:'center',
@@ -72,4 +105,12 @@ const styles = StyleSheet.create({
     padding: 10,
     height:50,
   },
-});
+  input:{
+    height: 40,
+    backgroundColor: '#3c5c93',
+    marginBottom:10,
+    padding:10,
+    borderRadius: 5,
+    color: '#a9a9a9',
+  },
+})

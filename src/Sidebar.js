@@ -18,6 +18,14 @@ const links = [
     {
         name: "PlayBack Devices",
         route: "Players",
+    },
+    {
+        name: "Queue",
+        route: "Queue",
+    },
+    {
+        name: "Search",
+        route: "Search",
     }
 ];
 

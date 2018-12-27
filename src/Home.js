@@ -1,5 +1,10 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, Text, TouchableHighlight} from 'react-native'
+import {
+    View, 
+    StyleSheet, 
+    Text, 
+    TouchableHighlight
+} from 'react-native'
 
 import {getConfig, getAuthToken} from '../globals.js'
 import Queue from './Queue'
@@ -34,7 +39,6 @@ export default class Home extends Component{
         onPress={() => this.props.navigation.toggleDrawer()}>
             <Text>woop</Text>
         </TouchableHighlight>
-        <Queue/>
       </View>
     )
   }
