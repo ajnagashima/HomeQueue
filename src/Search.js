@@ -50,8 +50,58 @@ export default class Search extends Component{
             results = await spotifyApi.search(
                 this.state.query,
                 ['album','artist','track','playlist'])
-            console.log(results)
+            console.log(results.albums.items.map(this.simplify.bind(this)))
+            console.log(results.artists.items.map(this.simplify.bind(this)))
         }
+    }
+
+    simplify(item){
+        type = item.type
+        result = {}
+        switch(type){
+        case 'album' || 'tracks':
+            result = {
+                type:item.type,
+                name:{
+                    name:item.name,
+                    id:item.id,
+                    href:item.href,
+                },
+                artists:item.artists.map(this.simplify),
+                images: item.images,
+            }
+            break
+        case 'artist':
+            result = {
+                type:item.type,
+                name:{
+                    name:item.name,
+                    id:item.id,
+                    href:item.href,
+                }
+            }
+            break
+        case 'playlists':
+            result = {
+                name:{
+                    name: item.name,
+                    id: item.id,
+                    href:item.href,
+                }
+            }
+            break
+        default :
+            break
+        }
+        return result
+    }
+
+    extractArtists(artist){
+        e = {
+            name:artist.name,
+            id:artist.id,
+        }
+        return e
     }
 
     setupApi(){
