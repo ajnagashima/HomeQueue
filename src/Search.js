@@ -5,13 +5,17 @@ import {
     Text, 
     TouchableHighlight,
     TextInput,
+    ListView,
 } from 'react-native'
+
+import ItemCard from './ItemCard'
 
 var SpotifyWebApi = require('spotify-web-api-js')
 
 import {getConfig, getAuthToken} from '../globals.js'
-
 const providers = ['Spotify']
+
+ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Search extends Component{
     constructor(props){
@@ -19,6 +23,7 @@ export default class Search extends Component{
         this.state = {
             configs:{},
             query:'',
+            dataSource: ds.cloneWithRows([]),
         }
     }
 
@@ -45,13 +50,25 @@ export default class Search extends Component{
         this.setState(tempState)
     }
 
+    updateDataSource(data){
+        tempState = this.state
+        tempState["dataSource"] = ds.cloneWithRows(data)
+        this.setState(tempState)
+    }
+
     async submitQuery(){
         if(this.state.query != '' && spotifyApi != null){
-            results = await spotifyApi.search(
+            rawResults = await spotifyApi.search(
                 this.state.query,
                 ['album','artist','track','playlist'])
-            console.log(results.albums.items.map(this.simplify.bind(this)))
-            console.log(results.artists.items.map(this.simplify.bind(this)))
+            results = []
+            //simplify each result section
+            results = results.concat(rawResults.albums.items.map(this.simplify.bind(this)))
+            results = results.concat(rawResults.artists.items.map(this.simplify.bind(this)))
+            results = results.concat(rawResults.tracks.items.map(this.simplify.bind(this)))
+            results = results.concat(rawResults.playlists.items.map(this.simplify.bind(this)))
+
+            this.updateDataSource(results)
         }
     }
 
@@ -59,7 +76,8 @@ export default class Search extends Component{
         type = item.type
         result = {}
         switch(type){
-        case 'album' || 'tracks':
+        case 'album':
+        case 'track':
             result = {
                 type:item.type,
                 name:{
@@ -78,16 +96,19 @@ export default class Search extends Component{
                     name:item.name,
                     id:item.id,
                     href:item.href,
-                }
+                },
+                images: item.images,
             }
             break
-        case 'playlists':
+        case 'playlist':
             result = {
+                type:item.type,
                 name:{
                     name: item.name,
                     id: item.id,
                     href:item.href,
-                }
+                },
+                images: item.images,
             }
             break
         default :
@@ -132,6 +153,15 @@ export default class Search extends Component{
                 placeholder='Search'
                 placeholderTextColor='#a9a9a9'
             />
+            <ListView
+                dataSource={this.state.dataSource}
+                renderRow={(rowData) =>
+                    <ItemCard
+                    data = {rowData}
+                    />
+                }
+                renderSeparator = {(sectionId,rowId) => <View key={rowId} style={styles.itemSeparator}/>}
+            />
             </View>
             </View>
         )
@@ -162,5 +192,10 @@ const styles = StyleSheet.create({
     padding:10,
     borderRadius: 5,
     color: '#a9a9a9',
+  },
+  itemSeperator: {
+    flex:1,
+    height:StyleSheet.hairlineWidth,
+    backgroundColor: 'white'
   },
 })

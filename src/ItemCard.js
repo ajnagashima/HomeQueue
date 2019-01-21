@@ -3,6 +3,8 @@ import {
     View,
     TouchableHighlight,
     Text,
+    StyleSheet,
+    Image
 } from 'react-native'
 
 export default class ItemCard extends Component{
@@ -11,12 +13,26 @@ export default class ItemCard extends Component{
     }
 
     render(){
-        {type, artist, album, track, playlist} = this.props
+        const {data} = this.props
+        images = undefined
+        if (data.images != undefined)
+            images = data.images.map((image)=>{
+                return {
+                    height:image.height,
+                    width:image.width,
+                    uri:image.url,
+                }
+            })
+        console.log(images)
         return (
             <View style={styles.cardView}>
+                <Image
+                    style = {styles.cardThumbnail}
+                    source={images}
+                />
                 <View style={styles.textContainer}>
                     <Text style={styles.cardHeader}>
-                        {track}
+                        {data.name.name +" : "+ data.type.toUpperCase()}
                     </Text>
                 </View>
             </View>
@@ -24,10 +40,10 @@ export default class ItemCard extends Component{
     }
 }
 
-const styles = Stylesheet.create({
+const styles = StyleSheet.create({
     //The main card container
     cardView:{
-        height:20,
+        height:80,
         flexDirection: 'column',
     },
     textContainer:{
@@ -44,6 +60,7 @@ const styles = Stylesheet.create({
     },
     //The image associated with this card
     cardThumbnail:{
+        resizeMode: 'contain',
     },
     //The action button for this card, should have same placement for all cards
     cardAction:{
