@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {
     View,
-    TouchableHighlight,
+    TouchableOpacity,
     Text,
     StyleSheet,
     Image
@@ -23,18 +23,19 @@ export default class ItemCard extends Component{
                     uri:image.url,
                 }
             })
-        console.log(images)
         return (
             <View style={styles.cardView}>
-                <Image
-                    style = {styles.cardThumbnail}
-                    source={images}
-                />
-                <View style={styles.textContainer}>
-                    <Text style={styles.cardHeader}>
-                        {data.name.name +" : "+ data.type.toUpperCase()}
-                    </Text>
-                </View>
+                <TouchableOpacity style={styles.cardTouch}>
+                    <Image
+                        style={styles.cardThumbnail}
+                        source={images}
+                    />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.cardHeader}>
+                            {data.name.name +" : "+ data.type.toUpperCase()}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -43,16 +44,21 @@ export default class ItemCard extends Component{
 const styles = StyleSheet.create({
     //The main card container
     cardView:{
+        flex:1,
         height:80,
-        flexDirection: 'column',
+        flexDirection: 'row',
+    },
+    cardTouch:{
+        flex:1,
     },
     textContainer:{
-        flexDirection: 'row',
+        flexDirection: 'column',
     },
     //The card Header
     cardHeader:{
         fontSize: 10,
         fontWeight: 'bold',
+        color:'white',
     },
     //The card flavor text if any (if no card text, card header will still be the same)
     cardText:{
@@ -60,6 +66,8 @@ const styles = StyleSheet.create({
     },
     //The image associated with this card
     cardThumbnail:{
+        height: 50,
+        width:50,
         resizeMode: 'contain',
     },
     //The action button for this card, should have same placement for all cards
