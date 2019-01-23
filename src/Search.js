@@ -15,6 +15,8 @@ var SpotifyWebApi = require('spotify-web-api-js')
 import {getConfig, getAuthToken} from '../globals.js'
 const providers = ['Spotify']
 
+import {add} from '../globalQueue.js'
+
 ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Search extends Component{
@@ -76,8 +78,9 @@ export default class Search extends Component{
         type = item.type
         result = {}
         switch(type){
-        case 'album':
         case 'track':
+            console.log(item)
+        case 'album':
             result = {
                 type:item.type,
                 name:{
@@ -158,6 +161,7 @@ export default class Search extends Component{
                 renderRow={(rowData) =>
                     <ItemCard
                     data = {rowData}
+                    callback={add}
                     />
                 }
                 renderSeparator = {(sectionId,rowId) => <View key={rowId} style={styles.itemSeparator}/>}

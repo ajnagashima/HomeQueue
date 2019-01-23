@@ -13,7 +13,7 @@ export default class ItemCard extends Component{
     }
 
     render(){
-        const {data} = this.props
+        const {data, callback} = this.props
         images = undefined
         if (data.images != undefined)
             images = data.images.map((image)=>{
@@ -25,7 +25,9 @@ export default class ItemCard extends Component{
             })
         return (
             <View style={styles.cardView}>
-                <TouchableOpacity style={styles.cardTouch}>
+                <TouchableOpacity style={styles.cardTouch}
+                onPress={()=>callback(data)}
+                >
                     <Image
                         style={styles.cardThumbnail}
                         source={images}
