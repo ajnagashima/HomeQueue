@@ -11,7 +11,7 @@ var SpotifyWebApi = require('spotify-web-api-js')
 
 import {getConfig, getAuthToken} from '../globals.js'
 
-import {exportQueue} from '../globalQueue.js'
+import {exportQueue, remove} from '../globalQueue.js'
 
 const providers = ['Spotify']
 
@@ -68,6 +68,7 @@ export default class Queue extends Component{
                     <ItemCard
                     data = {rowData}
                     callback = {(data) => console.log(data)}
+		    callback = {remove}
                     />
                 }
             />

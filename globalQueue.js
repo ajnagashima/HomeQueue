@@ -4,7 +4,11 @@ export function add(data){
     queue.push(data)
 }
 
-export function remove(){
+export function remove(data){
+    const idx = queue.indexOf(data)
+    if (idx > -1){
+	return queue.splice(idx, 1)
+    }
     return queue.shift()
 }
 
