@@ -6,6 +6,7 @@ import {
     TouchableHighlight,
     TextInput,
     ListView,
+    SectionList,
 } from 'react-native'
 
 import ItemCard from './ItemCard'
@@ -17,15 +18,13 @@ const providers = ['Spotify']
 
 import {add} from '../globalQueue.js'
 
-ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
 export default class Search extends Component{
     constructor(props){
         super(props)
         this.state = {
             configs:{},
             query:'',
-            dataSource: ds.cloneWithRows([]),
+            results:[],
         }
     }
 
@@ -52,12 +51,6 @@ export default class Search extends Component{
         this.setState(tempState)
     }
 
-    updateDataSource(data){
-        tempState = this.state
-        tempState["dataSource"] = ds.cloneWithRows(data)
-        this.setState(tempState)
-    }
-
     async submitQuery(){
         if(this.state.query != '' && spotifyApi != null){
             rawResults = await spotifyApi.search(
@@ -65,13 +58,20 @@ export default class Search extends Component{
                 ['album','artist','track','playlist'])
             results = []
             //simplify each result section
-            results = results.concat(rawResults.albums.items.map(this.simplify.bind(this)))
-            results = results.concat(rawResults.artists.items.map(this.simplify.bind(this)))
-            results = results.concat(rawResults.tracks.items.map(this.simplify.bind(this)))
-            results = results.concat(rawResults.playlists.items.map(this.simplify.bind(this)))
-
-            this.updateDataSource(results)
+            results = results.concat({title:'Songs', data:rawResults.tracks.items.map(this.simplify.bind(this))})
+            results = results.concat({title:'Albums', data:rawResults.albums.items.map(this.simplify.bind(this))})
+            results = results.concat({title:'Artists', data:rawResults.artists.items.map(this.simplify.bind(this))})
+            results = results.concat({title:'Playlists', data:rawResults.playlists.items.map(this.simplify.bind(this))})
+            
+            this.updateData(results)
         }
+
+    }
+
+    updateData(results){
+        tempState = this.state
+        tempState['results'] = results
+        this.setState(tempState)
     }
 
     simplify(item){
@@ -166,15 +166,21 @@ export default class Search extends Component{
                 placeholder='Search'
                 placeholderTextColor='#a9a9a9'
             />
-            <ListView
-                dataSource={this.state.dataSource}
-                renderRow={(rowData) =>
+            <SectionList
+                sections={this.state.results}
+                renderItem={({item, index, section}) =>
                     <ItemCard
-                    data = {rowData}
+                    data = {item}
                     callback={add}
                     />
                 }
-                renderSeparator = {(sectionId,rowId) => <View key={rowId} style={styles.itemSeparator}/>}
+                renderSectionHeader={({section: {title}}) => (
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionHeaderText}>{title}</Text>
+                    </View>
+                )}
+                ItemSeparatorComponent = {()=>(<View style={styles.itemSeparator}/>)}
+                keyExtractor={(item, index)=>item+index}
             />
             </View>
             </View>
@@ -199,6 +205,19 @@ const styles = StyleSheet.create({
     padding: 10,
     height:50,
   },
+  sectionHeader: {
+    height: 20,
+    flex:1,
+    paddingRight: 10,
+    marginBottom:4,
+    alignItems:'flex-start',
+    justifyContent:'center',
+  },
+  sectionHeaderText: {
+    fontWeight:'bold',
+    fontSize: 15,
+    color:'white',
+  },
   input:{
     height: 40,
     backgroundColor: '#3c5c93',
@@ -207,9 +226,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: '#a9a9a9',
   },
-  itemSeperator: {
-    flex:1,
-    height:StyleSheet.hairlineWidth,
-    backgroundColor: 'white'
+  itemSeparator: {
+    height:1,
+    marginTop:2,
+    marginBottom:2,
+    backgroundColor: 'gray',
   },
 })
