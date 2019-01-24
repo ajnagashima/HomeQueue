@@ -37,7 +37,7 @@ export default class Home extends Component{
       <View style={styles.container}>
         <TouchableHighlight style = {styles.header}
         onPress={() => this.props.navigation.toggleDrawer()}>
-            <Text>woop</Text>
+            <Text>Menu</Text>
         </TouchableHighlight>
       </View>
     )

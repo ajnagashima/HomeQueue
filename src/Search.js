@@ -79,7 +79,17 @@ export default class Search extends Component{
         result = {}
         switch(type){
         case 'track':
-            console.log(item)
+            result = {
+                type:item.type,
+                name:{
+                    name:item.name,
+                    id:item.id,
+                    href:item.href,
+                },
+                artists:item.artists.map(this.simplify),
+                images: item.album.images,
+            }
+            break
         case 'album':
             result = {
                 type:item.type,
