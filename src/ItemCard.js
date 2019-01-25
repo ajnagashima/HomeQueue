@@ -26,7 +26,7 @@ export default class ItemCard extends Component{
         return (
             <View style={styles.cardView}>
                 <TouchableOpacity style={styles.cardTouch}
-                onPress={()=>callback(data)}
+                onPress={()=>callback()}
                 >
                     <Image
                         style={styles.cardThumbnail}

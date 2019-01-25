@@ -4,7 +4,7 @@ import {
     StyleSheet, 
     Text, 
     TouchableHighlight,
-    ListView,
+    FlatList,
 } from 'react-native'
 
 var SpotifyWebApi = require('spotify-web-api-js')
@@ -17,14 +17,12 @@ const providers = ['Spotify']
 
 import ItemCard from './ItemCard'
 
-ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2})
-
 export default class Queue extends Component{
     constructor(props){
         super(props)
         this.state = {
             configs:{},
-            dataSource:ds.cloneWithRows(exportQueue()),
+            queue:exportQueue(),
         }
     }
 
@@ -45,6 +43,15 @@ export default class Queue extends Component{
         this.setupApi()
     }
 
+    updateQueue(){
+        //Create temporary state
+        tempState = this.state
+        //Update queue field of temp state
+        tempState['queue'] = exportQueue()
+        //Set state to edited temp state
+        this.setState(tempState)
+    }
+
     setupApi(){
         if (this.state.configs.Spotify != undefined){
             spotifyApi = new SpotifyWebApi()
@@ -62,15 +69,19 @@ export default class Queue extends Component{
                 <Text>In Queue</Text>
             </TouchableHighlight>
             <View style={styles.queueContainer}>
-            <ListView
-                dataSource={this.state.dataSource}
-                renderRow={(rowData) =>
+            <FlatList
+                data={this.state.queue}
+                renderItem={({item, index}) =>
                     <ItemCard
-                    data = {rowData}
-                    callback = {(data) => console.log(data)}
-		    callback = {remove}
+                    data = {item}
+                    callback={()=>{
+                        remove(index)
+                        this.updateQueue()
+                    }}
                     />
                 }
+                ItemSeparatorComponent = {()=>(<View style={styles.itemSeparator}/>)}
+                keyExtractor={(item, index)=>item+index}
             />
             </View>
             </View>
@@ -94,5 +105,11 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection:'column',
     backgroundColor:'#3c5c93',
-  }
+  },
+  itemSeparator: {
+    height:1,
+    marginTop:2,
+    marginBottom:2,
+    backgroundColor: 'gray',
+  },
 });

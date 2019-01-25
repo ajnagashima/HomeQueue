@@ -171,7 +171,7 @@ export default class Search extends Component{
                 renderItem={({item, index, section}) =>
                     <ItemCard
                     data = {item}
-                    callback={add}
+                    callback={()=>add(item)}
                     />
                 }
                 renderSectionHeader={({section: {title}}) => (

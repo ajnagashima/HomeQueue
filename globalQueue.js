@@ -1,13 +1,14 @@
 const queue = []
 
+//take data parameter and add
 export function add(data){
     queue.push(data)
 }
 
-export function remove(data){
-    const idx = queue.indexOf(data)
-    if (idx > -1){
-	return queue.splice(idx, 1)
+//Take index parameter and remove
+export function remove(index){
+    if (index > -1){
+	return queue.splice(index, 1)
     }
     return queue.shift()
 }
