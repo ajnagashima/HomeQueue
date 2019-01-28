@@ -6,6 +6,7 @@ import {
     TouchableHighlight,
     FlatList,
 } from 'react-native'
+import DraggableFlatList from './DraggableFlatList.js'
 
 var SpotifyWebApi = require('spotify-web-api-js')
 
@@ -69,7 +70,7 @@ export default class Queue extends Component{
                 <Text>In Queue</Text>
             </TouchableHighlight>
             <View style={styles.queueContainer}>
-            <FlatList
+            <DraggableFlatList
                 data={this.state.queue}
                 renderItem={({item, index}) =>
                     <ItemCard
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
   },
   header:{
     justifyContent:'center',
-    backgroundColor:'#84bd00',
+    backgroundColor:'#1190cb',
     padding: 10,
     height:50,
   },

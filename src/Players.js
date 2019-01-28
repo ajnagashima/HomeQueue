@@ -28,17 +28,16 @@ export default class Players extends Component{
   render(){
     return(
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>You have entered Players</Text>
-        </View>
-        <TouchableHighlight style={styles.headerContainer}
+        <TouchableHighlight style={styles.header}
         onPress={() => this.props.navigation.toggleDrawer()}>
-            <Text>woop</Text>
+            <Text>Players</Text>
         </TouchableHighlight>
-        <Text style={styles.headerText}>
-          Spotify
-        </Text>
-        <SpotifyAuth/> 
+        <View style={styles.playerContainer}>
+            <Text style={styles.headerText}>
+            Spotify
+            </Text>
+            <SpotifyAuth/> 
+        </View>
       </View>
     )
   }
@@ -55,15 +54,15 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     backgroundColor:'#84bd00',
   },
-  headerContainer:{
+  header:{
     justifyContent: 'center',
     backgroundColor: '#1190cb',
-    height: 30,
+    height: 50,
     padding: 10,
   },
-  headerText:{
-    fontWeight: 'bold',
-    color: 'black',
-    fontSize: 20,
-  }
+  playerContainer:{
+    flex:1,
+    flexDirection:'column',
+    backgroundColor:'#3c5c93',
+  },
 });

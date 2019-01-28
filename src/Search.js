@@ -49,6 +49,7 @@ export default class Search extends Component{
         tempState = this.state
         tempState[id] = text
         this.setState(tempState)
+        this.submitQuery()
     }
 
     async submitQuery(){
@@ -162,7 +163,7 @@ export default class Search extends Component{
                 autoCorrect={true}
                 returnKeyType="search"
                 onChangeText={(text)=> this.handleChange("query",text)}
-                onSubmitEditing={() => this.submitQuery()}
+                onSubmitEditing={() => {}}
                 placeholder='Search'
                 placeholderTextColor='#a9a9a9'
             />
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   },
   header:{
     justifyContent:'center',
-    backgroundColor:'#84bd00',
+    backgroundColor:'#1190cb',
     padding: 10,
     height:50,
   },

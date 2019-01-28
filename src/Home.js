@@ -37,8 +37,11 @@ export default class Home extends Component{
       <View style={styles.container}>
         <TouchableHighlight style = {styles.header}
         onPress={() => this.props.navigation.toggleDrawer()}>
-            <Text>Menu</Text>
+            <Text>Home</Text>
         </TouchableHighlight>
+        <View style={styles.homeContainer}>
+
+        </View>
       </View>
     )
   }
@@ -49,12 +52,16 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection:'column',
     backgroundColor: '#fff',
-    justifyContent: 'center',
   },
   header:{
     justifyContent:'center',
-    backgroundColor:'#84bd00',
+    backgroundColor:'#1190cb',
     padding: 10,
     height:50,
   },
+  homeContainer:{
+    flex:1,
+    flexDirection:'column',
+    backgroundColor:'#3c5c93',
+  }
 });
