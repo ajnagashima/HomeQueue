@@ -1,21 +1,29 @@
 import React, {Component} from 'react'
 import {
-    View,
-    ListView,
+    View, 
+    StyleSheet, 
+    Text, 
+    TouchableHighlight,
+    FlatList,
 } from 'react-native'
+import DraggableFlatList from './DraggableFlatList.js'
 
 var SpotifyWebApi = require('spotify-web-api-js')
 
 import {getConfig, getAuthToken} from '../globals.js'
 
+import {exportQueue, remove} from '../globalQueue.js'
+
 const providers = ['Spotify']
+
+import ItemCard from './ItemCard'
 
 export default class Queue extends Component{
     constructor(props){
         super(props)
         this.state = {
             configs:{},
-
+            queue:exportQueue(),
         }
     }
 
@@ -36,6 +44,15 @@ export default class Queue extends Component{
         this.setupApi()
     }
 
+    updateQueue(){
+        //Create temporary state
+        tempState = this.state
+        //Update queue field of temp state
+        tempState['queue'] = exportQueue()
+        //Set state to edited temp state
+        this.setState(tempState)
+    }
+
     setupApi(){
         if (this.state.configs.Spotify != undefined){
             spotifyApi = new SpotifyWebApi()
@@ -47,8 +64,53 @@ export default class Queue extends Component{
 
     render(){
         return(
-            <View>
+            <View style={styles.container}>
+            <TouchableHighlight style = {styles.header}
+            onPress={() => this.props.navigation.toggleDrawer()}>
+                <Text>In Queue</Text>
+            </TouchableHighlight>
+            <View style={styles.queueContainer}>
+            <DraggableFlatList
+                data={this.state.queue}
+                renderItem={({item, index}) =>
+                    <ItemCard
+                    data = {item}
+                    callback={()=>{
+                        remove(index)
+                        this.updateQueue()
+                    }}
+                    />
+                }
+                ItemSeparatorComponent = {()=>(<View style={styles.itemSeparator}/>)}
+                keyExtractor={(item, index)=>item+index}
+            />
+            </View>
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex:1,
+    flexDirection:'column',
+    backgroundColor: '#fff',
+  },
+  header:{
+    justifyContent:'center',
+    backgroundColor:'#1190cb',
+    padding: 10,
+    height:50,
+  },
+  queueContainer:{
+    flex:1,
+    flexDirection:'column',
+    backgroundColor:'#3c5c93',
+  },
+  itemSeparator: {
+    height:1,
+    marginTop:2,
+    marginBottom:2,
+    backgroundColor: 'gray',
+  },
+});
