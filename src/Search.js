@@ -89,6 +89,7 @@ export default class Search extends Component{
                 },
                 artists:item.artists.map(this.simplify),
                 images: item.album.images,
+                uri: item.uri,
             }
             break
         case 'album':
@@ -101,6 +102,7 @@ export default class Search extends Component{
                 },
                 artists:item.artists.map(this.simplify),
                 images: item.images,
+                uri:item.uri,
             }
             break
         case 'artist':
@@ -112,6 +114,7 @@ export default class Search extends Component{
                     href:item.href,
                 },
                 images: item.images,
+                uri: item.uri,
             }
             break
         case 'playlist':
@@ -123,6 +126,7 @@ export default class Search extends Component{
                     href:item.href,
                 },
                 images: item.images,
+                uri: item.uri,
             }
             break
         default :

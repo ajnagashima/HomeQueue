@@ -62,6 +62,14 @@ export default class Queue extends Component{
         }
     }
 
+    play(data) {
+        console.log(data)
+        spotifyApi.play({
+            'uris':[data.uri],
+            'position_ms':0
+        });
+    }
+
     render(){
         return(
             <View style={styles.container}>
@@ -76,7 +84,8 @@ export default class Queue extends Component{
                     <ItemCard
                     data = {item}
                     callback={()=>{
-                        remove(index)
+                        this.play(item)
+                        //remove(item)
                         this.updateQueue()
                     }}
                     />
