@@ -13,10 +13,10 @@ export function remove(index){
     return queue.shift()
 }
 
-export function move(cur, dest){
-    [queue[dest], queue[cur]] =[queue[cur], queue[dest]]
-}
-
 export function exportQueue(){
     return queue
+}
+
+export function importQueue(arr) {
+    queue = arr
 }
