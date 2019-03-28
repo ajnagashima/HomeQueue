@@ -6,7 +6,7 @@ import {
     TouchableHighlight,
     FlatList,
 } from 'react-native'
-import DraggableFlatList from './DraggableFlatList.js'
+import SortableList from 'react-native-sortable-list'
 
 var SpotifyWebApi = require('spotify-web-api-js')
 
@@ -70,22 +70,29 @@ export default class Queue extends Component{
                 <Text>In Queue</Text>
             </TouchableHighlight>
             <View style={styles.queueContainer}>
-            <DraggableFlatList
+            <SortableList
                 data={this.state.queue}
-                renderItem={({item, index}) =>
+                renderRow={({key, index, data, disabled, active}) =>
                     <ItemCard
-                    data = {item}
+                    data = {data}
                     callback={()=>{
-                        remove(index)
+                        //remove(index)
                         this.updateQueue()
                     }}
                     />
                 }
-                ItemSeparatorComponent = {()=>(<View style={styles.itemSeparator}/>)}
-                keyExtractor={(item, index)=>item+index}
             />
             </View>
             </View>
+        )
+    }
+}
+
+//TODO
+class Row extends Component {
+    render() {
+        return (
+            <View/> 
         )
     }
 }
