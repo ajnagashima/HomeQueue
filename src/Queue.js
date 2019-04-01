@@ -4,7 +4,11 @@ import {
     StyleSheet, 
     Text, 
     TouchableHighlight,
-    FlatList,
+    Animated, 
+    Easing, 
+    Dimensions,
+    Platform,
+    TouchableOpacity,
 } from 'react-native'
 import SortableList from 'react-native-sortable-list'
 
@@ -63,6 +67,7 @@ export default class Queue extends Component{
     }
 
     render(){
+        console.log(this.state.queue.length)
         return(
             <View style={styles.container}>
             <TouchableHighlight style = {styles.header}
@@ -72,27 +77,90 @@ export default class Queue extends Component{
             <View style={styles.queueContainer}>
             <SortableList
                 data={this.state.queue}
-                renderRow={({key, index, data, disabled, active}) =>
-                    <ItemCard
-                    data = {data}
-                    callback={()=>{
-                        //remove(index)
-                        this.updateQueue()
-                    }}
-                    />
-                }
+                renderRow={this._renderRow}
+                manuallyActivateRows
             />
             </View>
             </View>
         )
     }
+
+    _renderRow = ({data, active, index}) => {
+        return <Row data={data} active={active} index={index} callback={() => this.updateQueue()}/>
+    }
 }
 
-//TODO
 class Row extends Component {
+    constructor(props) {
+        super(props);
+
+        this._active = new Animated.Value(0);
+
+        this._style = {
+            ...Platform.select({
+                ios: {
+                    transform: [{
+                        scale: this._active.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [1, 1.1],
+                        }),
+                    }],
+                    shadowRadius: this._active.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [2, 10],
+                    }),
+                },
+
+                android: {
+                    transform: [{
+                        scale: this._active.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [1, 1.07],
+                        }),
+                    }],
+                    elevation: this._active.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [2, 6],
+                    }),
+                },
+            })
+        };
+    }
+
+    updateQueue(){
+        //Create temporary state
+        tempState = this.state
+        //Update queue field of temp state
+        tempState['queue'] = exportQueue()
+        //Set state to edited temp state
+        this.setState(tempState)
+    }
+
+    componenetWillReceiveProps(nextProps) {
+        if (this.props.active !== nextProps.active) {
+            Animated.timing(this._active, {
+                duration: 300,
+                easing: Easing.bounce,
+                toValue: Number(nextProps.active),
+            }).start();
+        }
+    }
+
     render() {
+        const {data, active, index, callback} = this.props;
         return (
-            <View/> 
+            <Animated.View style={[this._style]}>
+                <TouchableOpacity
+                onPress={ ()=>{
+                    remove(index)
+                }}
+                onLongPress={this.props.toggleRowActive}
+                >
+                    <ItemCard
+                        data = {data}
+                    />
+                </TouchableOpacity>
+            </Animated.View> 
         )
     }
 }

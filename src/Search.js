@@ -4,6 +4,7 @@ import {
     StyleSheet, 
     Text, 
     TouchableHighlight,
+    TouchableOpacity,
     TextInput,
     ListView,
     SectionList,
@@ -170,10 +171,13 @@ export default class Search extends Component{
             <SectionList
                 sections={this.state.results}
                 renderItem={({item, index, section}) =>
-                    <ItemCard
-                    data = {item}
-                    callback={()=>add(item)}
-                    />
+                    <TouchableOpacity
+                     onPress={()=>add(item)}>
+                        <ItemCard
+                        data = {item}
+                        callback={()=>add(item)}
+                        />
+                    </TouchableOpacity>
                 }
                 renderSectionHeader={({section: {title}}) => (
                     <View style={styles.sectionHeader}>

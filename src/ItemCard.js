@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {
     View,
-    TouchableOpacity,
     Text,
     StyleSheet,
     Image
@@ -13,7 +12,7 @@ export default class ItemCard extends Component{
     }
 
     render(){
-        const {data, callback} = this.props
+        const {data} = this.props
         images = undefined
         if (data.images != undefined)
             images = data.images.map((image)=>{
@@ -25,9 +24,6 @@ export default class ItemCard extends Component{
             })
         return (
             <View style={styles.cardView}>
-                <TouchableOpacity style={styles.cardTouch}
-                onPress={()=>callback()}
-                >
                     <Image
                         style={styles.cardThumbnail}
                         source={images}
@@ -40,7 +36,6 @@ export default class ItemCard extends Component{
                             PlaceHolder Text qwertyasdfgh I hope that a majority of this text will not make it
                         </Text>
                     </View>
-                </TouchableOpacity>
             </View>
         )
     }
@@ -49,9 +44,6 @@ export default class ItemCard extends Component{
 const styles = StyleSheet.create({
     //The main card container
     cardView:{
-        flex:1,
-    },
-    cardTouch:{
         flex:1,
         flexDirection: 'row',
         alignItems: 'center',
