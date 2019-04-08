@@ -6,7 +6,7 @@ Playing music using the spotify API
 ### Requires nvm
 To install nvm:
 ```bash
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 ```
 
 ### Requires node v11.1.0
